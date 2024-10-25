@@ -1,57 +1,11 @@
 // Inizializza le note e le categorie dal localStorage e visualizzale subito
-let notes = JSON.parse(localStorage.getItem('notes')) || [];
+let notes = []; // Inizializza le note come un array vuoto
 let categories = JSON.parse(localStorage.getItem('categories')) || [];
 let editIndex = null;
 let deleteIndex = null;
 
-// Variabili per la gestione dell'autenticazione
-const userKey = 'user';
-const defaultUser = { username: 'admin', password: 'password' }; // Cambia le credenziali predefinite se necessario
-let isAuthenticated = false;
-
 // Visualizza subito le note già esistenti all'avvio dell'app
-if (isUserAuthenticated()) {
-    displayNotes();
-} else {
-    showLoginForm(); // Mostra il modulo di login se non autenticato
-}
-
-// Funzione per verificare se l'utente è autenticato
-function isUserAuthenticated() {
-    return localStorage.getItem(userKey) !== null;
-}
-
-// Funzione per mostrare il modulo di login
-function showLoginForm() {
-    const loginHTML = `
-        <div class="login-form">
-            <h3>Login</h3>
-            <input type="text" id="loginUsername" placeholder="Username" />
-            <input type="password" id="loginPassword" placeholder="Password" />
-            <button id="loginButton" class="btn btn-primary">Login</button>
-        </div>
-    `;
-    document.body.innerHTML = loginHTML; // Sostituisci il body con il modulo di login
-
-    // Gestisci il click sul bottone di login
-    document.getElementById('loginButton').addEventListener('click', handleLogin);
-}
-
-// Funzione per gestire il login
-function handleLogin() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-
-    // Verifica le credenziali
-    if (username === defaultUser.username && password === defaultUser.password) {
-        localStorage.setItem(userKey, JSON.stringify(defaultUser)); // Salva l'utente nel localStorage
-        isAuthenticated = true;
-        displayNotes(); // Mostra le note
-        document.body.innerHTML = originalBodyHTML; // Ripristina il body originale
-    } else {
-        showAlert('Credenziali errate!', 'danger');
-    }
-}
+displayNotes();
 
 // Funzione per mostrare un alert di Bootstrap
 function showAlert(message, type = 'success') {
@@ -70,6 +24,11 @@ function showAlert(message, type = 'success') {
 // Funzione per salvare le note nel localStorage
 function saveNotesToLocalStorage() {
     localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+// Funzione per salvare le categorie nel localStorage
+function saveCategoriesToLocalStorage() {
+    localStorage.setItem('categories', JSON.stringify(categories));
 }
 
 // Funzione per visualizzare le note
